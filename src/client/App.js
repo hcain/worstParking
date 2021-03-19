@@ -1,23 +1,35 @@
-import React, { Component } from 'react';
-import './app.css';
-import ReactImage from './react.png';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-export default class App extends Component {
-  state = { username: null };
+import Header from "./Header";
+import LocationsList from "./LocationsList"
+import "./app.css";
 
-  componentDidMount() {
-    fetch('/api/getUsername')
-      .then(res => res.json())
-      .then(user => this.setState({ username: user.username }));
-  }
+const App = () => {
+  const [parkingLots, setParkingLots] = useState();
 
-  render() {
-    const { username } = this.state;
-    return (
-      <div>
-        {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
-        <img src={ReactImage} alt="react" />
-      </div>
-    );
-  }
-}
+  const fetchParkingLots = async (location) => {
+    try {
+      const response = await axios.get(`/api/?location=${location}`);
+      console.log(response.data.businesses);
+      setParkingLots(response.data.businesses.reverse());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    const location = event.target[0].value;
+    console.log(location)
+    event.preventDefault();
+    fetchParkingLots(location);
+  };
+
+  return (
+    <div>
+      <Header handleSubmit={handleSubmit}/>
+      <LocationsList parkingLots={parkingLots}/>
+    </div>
+  );
+};
+export default App;
