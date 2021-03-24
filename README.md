@@ -11,7 +11,7 @@ Coding challege for [AirGarage](https://airgara.ge/)
 git clone https://github.com/hcain/worstParking
 
 # Go inside the directory
-cd simple-react-full-stack
+cd worstParking
 
 # Install dependencies
 yarn (or npm install)
